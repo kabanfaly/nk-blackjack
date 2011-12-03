@@ -6,7 +6,7 @@ package blackjack;
 
 /**
  *
- * @author JFLR9172
+ * @author CONDE Oumar
  */
 public class Blackjack {
 
