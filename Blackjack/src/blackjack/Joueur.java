@@ -45,5 +45,9 @@ public class Joueur {
     public void setMain(Main main) {
         this.main = main;
     }
-           
+    
+    public void ajouterCarte(Carte c){
+        main.ajouterCarte(c);
+    }
+    
 }

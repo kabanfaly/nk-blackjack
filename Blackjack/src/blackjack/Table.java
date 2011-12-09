@@ -11,11 +11,13 @@ public class Table {
     ArrayList<Joueur> joueurs;
     ArrayList<Carte> cartes;
     Joueur croupier;
+    ArrayList<Carte> defausse; // carte de la defausse
 
     public Table(ArrayList<Joueur> joueurs, ArrayList<Carte> cartes, Joueur croupier) {
         this.joueurs = joueurs;
         this.cartes = cartes;
         this.croupier = croupier;
+        defausse=  new ArrayList<Carte>();
     }
 
     /**
@@ -111,10 +113,43 @@ public class Table {
             cartes.set(position1, cartes.get(position2));
             cartes.set(position2, tmp);
         }
-        
     }
-
+    /**
+     * Defausse la première carte du jeu
+     */
+    public void defausserUneCarte(){
+        if(cartes.size() > 0){
+            defausse.add(cartes.get(0)); // ajout la de premiere carte a la defausse
+            cartes.remove(0); // suppression de la premiere carte des cartes du jeu
+        }
+    }
+    /**
+     * Donne la premiere carte du jeu a un joueur
+     * @param j le joueur demandeur
+     */
+    public void donnerCarte(Joueur j){
+       j.ajouterCarte(cartes.get(0));
+       cartes.remove(0);
+    }
     
+    /**
+     * Cree le sabot: Melange les cartes du jeu puis defausse les 5 premieres carte
+     */
+    public void creerSabot(){
+        this.melanger();
+        for(int i=0; i<5; i++){
+            this.defausserUneCarte();
+        }
+    }
+    /**
+     * Verifie que le sabot contient moins de 52 cartes. Si oui on recupere la carte de la defausse;
+     */
+    public void validerTour(){
+        if(cartes.size() < 52){
+            cartes.addAll(defausse); //recuperer les cartes de la defausse
+            defausse.clear(); // reinitialisation de la defausse
+        }
+    }
     /**
      * Renvoie un entier aleatoirement choisi entre 0 (compris) et max (non
      * compris).
