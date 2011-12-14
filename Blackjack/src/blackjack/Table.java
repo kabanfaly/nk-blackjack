@@ -177,7 +177,7 @@ public class Table {
         return gen.nextInt(max);
     }
     /**
-     * 
+     * Creer un jeu de 52 carte
      */
     public static ArrayList<Carte> creer52Carte(){
         ArrayList<Carte> cartes = new ArrayList<Carte>();
@@ -191,6 +191,7 @@ public class Table {
         cartes.add(asCarreau);
         cartes.add(asCoeur);
         cartes.add(asPique);
+        
         //Cartes deux
         Carte deuxTreifle = new Carte("Deux de treifle", 2);
         Carte deuxCarreau = new Carte("Deux de carreau", 2);
@@ -201,7 +202,8 @@ public class Table {
         cartes.add(deuxCarreau);
         cartes.add(deuxCoeur);
         cartes.add(deuxPique);
-        //Cartes deux
+        
+        //Cartes trois
         Carte troisTreifle = new Carte("Trois de treifle", 3);
         Carte troisCarreau = new Carte("Trois de carreau", 3);
         Carte troisCoeur = new Carte("Trois de coeur", 3);
@@ -211,7 +213,8 @@ public class Table {
         cartes.add(troisCarreau);
         cartes.add(troisCoeur);
         cartes.add(troisPique);
-        //Cartes trois
+        
+        //Cartes quatre
         Carte quatreTreifle = new Carte("Quatre de treifle", 4);
         Carte quatreCarreau = new Carte("Quatre de carreau", 4);
         Carte quatreCoeur = new Carte("Quatre de coeur", 4);
@@ -221,6 +224,7 @@ public class Table {
         cartes.add(quatreCarreau);
         cartes.add(quatreCoeur);
         cartes.add(quatrePique);
+        
         //Cartes cinq
         Carte cinqTreifle = new Carte("Cinq de treifle", 5);
         Carte cinqCarreau = new Carte("Cinq de carreau", 5);
@@ -231,6 +235,92 @@ public class Table {
         cartes.add(cinqCarreau);
         cartes.add(cinqCoeur);
         cartes.add(cinqPique);
+        
+        //Cartes six
+        Carte sixTreifle = new Carte("Six de treifle", 6);
+        Carte sixCarreau = new Carte("Six de carreau", 6);
+        Carte sixCoeur = new Carte("Six de coeur", 6);
+        Carte sixPique = new Carte("Six de pique", 6);
+        //Ajout six
+        cartes.add(sixTreifle);
+        cartes.add(sixCarreau);
+        cartes.add(sixCoeur);
+        cartes.add(sixPique);
+        
+        //Cartes sept
+        Carte septTreifle = new Carte("Sept de treifle", 7);
+        Carte septCarreau = new Carte("Sept de carreau", 7);
+        Carte septCoeur = new Carte("Sept de coeur", 7);
+        Carte septPique = new Carte("Sept de pique", 7);
+        //Ajout sept
+        cartes.add(septTreifle);
+        cartes.add(septCarreau);
+        cartes.add(septCoeur);
+        cartes.add(septPique);
+        
+        //Cartes huit
+        Carte huitTreifle = new Carte("Huit de treifle", 8);
+        Carte huitCarreau = new Carte("Huit de carreau", 8);
+        Carte huitCoeur = new Carte("Huit de coeur", 8);
+        Carte huitPique = new Carte("Huit de pique", 8);
+        //Ajout huit
+        cartes.add(huitTreifle);
+        cartes.add(huitCarreau);
+        cartes.add(huitCoeur);
+        cartes.add(huitPique);
+        
+        //Cartes neuf
+        Carte neufTreifle = new Carte("Neuf de treifle", 9);
+        Carte neufCarreau = new Carte("Neuf de carreau", 9);
+        Carte neufCoeur = new Carte("Neuf de coeur", 9);
+        Carte neufPique = new Carte("Neuf de pique", 9);
+        //Ajout neuf
+        cartes.add(neufTreifle);
+        cartes.add(neufCarreau);
+        cartes.add(neufCoeur);
+        cartes.add(neufPique);
+        //Cartes dix
+        Carte dixTreifle = new Carte("Dix de treifle", 10);
+        Carte dixCarreau = new Carte("Dix de carreau", 10);
+        Carte dixCoeur = new Carte("Dix de coeur", 10);
+        Carte dixPique = new Carte("Dix de pique", 10);
+        //Ajout dix
+        cartes.add(dixTreifle);
+        cartes.add(dixCarreau);
+        cartes.add(dixCoeur);
+        cartes.add(dixPique);
+        
+        //Cartes valet
+        Carte valetTreifle = new Carte("Valet de treifle", 10);
+        Carte valetCarreau = new Carte("Valet de carreau", 10);
+        Carte valetCoeur = new Carte("Valet de coeur", 10);
+        Carte valetPique = new Carte("Valet de pique", 10);
+        //Ajout valet
+        cartes.add(valetTreifle);
+        cartes.add(valetCarreau);
+        cartes.add(valetCoeur);
+        cartes.add(valetPique);
+        //Cartes dame
+        Carte dameTreifle = new Carte("Dame de treifle", 10);
+        Carte dameCarreau = new Carte("Dame de carreau", 10);
+        Carte dameCoeur = new Carte("Dame de coeur", 10);
+        Carte damePique = new Carte("Dame de pique", 10);
+        
+        //Ajout dame
+        cartes.add(dameTreifle);
+        cartes.add(dameCarreau);
+        cartes.add(dameCoeur);
+        cartes.add(damePique);
+        //Cartes roi
+        Carte roiTreifle = new Carte("Roi de treifle", 10);
+        Carte roiCarreau = new Carte("Roi de carreau", 10);
+        Carte roiCoeur = new Carte("Roi de coeur", 10);
+        Carte roiPique = new Carte("Roi de pique", 10);
+        //Ajout roi
+        cartes.add(roiTreifle);
+        cartes.add(roiCarreau);
+        cartes.add(roiCoeur);
+        cartes.add(roiPique);
         
         return cartes;
         
