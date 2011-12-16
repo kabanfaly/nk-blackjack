@@ -13,10 +13,14 @@ public class Table {
    private Joueur croupier;
    private ArrayList<Carte> defausse; // carte de la defausse
 
-    public Table(ArrayList<Joueur> joueurs, ArrayList<Carte> cartes, Joueur croupier) {
-        this.joueurs = joueurs;
-        this.cartes = cartes;
-        this.croupier = croupier;
+    public Table(ArrayList<Joueur> joueurs) {
+        this.joueurs = joueurs;        
+        this.croupier = new Joueur(0, "Croupier");
+        this.cartes = new ArrayList<Carte>();
+        //Creation de 6 jeux de 52 cartes
+        for(int i=0; i<6; i++){
+            this.cartes.addAll(Table.creer52Cartes());
+        }
         defausse=  new ArrayList<Carte>();
     }
 
@@ -130,6 +134,23 @@ public class Table {
             cartes.set(position2, tmp);
         }
     }
+    public void distribuer(){
+        
+    }
+
+    @Override
+    public String toString() {
+       String retour = "***********$$$$$$$ TABLE $$$$$$$*************";
+       retour += "Le sabot contient: "+ cartes.size() + " cartes\n";
+       retour += "La defausse contient: "+ defausse.size() + " cartes\n";
+       retour += croupier.toString() +"\n";
+       for(int i=0; i<joueurs.size(); i++){
+           retour += joueurs.get(i).toString() +"\n";
+       }
+       
+       return retour;
+    }
+    
     /**
      * Defausse la première carte du jeu
      */
@@ -179,7 +200,7 @@ public class Table {
     /**
      * Creer un jeu de 52 carte
      */
-    public static ArrayList<Carte> creer52Carte(){
+    public static ArrayList<Carte> creer52Cartes(){
         ArrayList<Carte> cartes = new ArrayList<Carte>();
         //Cartes As
         Carte asTreifle = new Carte("As de treifle", 11);

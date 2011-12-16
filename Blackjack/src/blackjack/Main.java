@@ -61,5 +61,18 @@ public class Main {
         }
         return total;
     }
+
+    @Override
+    public String toString() {
+        String retour = "";
+        if(cartes.size() > 0){
+        for(int i=0; i<cartes.size(); i++){
+            retour += cartes.get(i).toString() + "\n";
+        }
+        }else{
+            retour += "Aucune carte\n";
+        }
+        return retour;
+    }
     
 }
