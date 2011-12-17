@@ -140,7 +140,7 @@ public class Table {
 
     @Override
     public String toString() {
-       String retour = "***********$$$$$$$ TABLE $$$$$$$*************";
+       String retour = "***********$$$$$$$ TABLE $$$$$$$*************\n";
        retour += "Le sabot contient: "+ cartes.size() + " cartes\n";
        retour += "La defausse contient: "+ defausse.size() + " cartes\n";
        retour += croupier.toString() +"\n";

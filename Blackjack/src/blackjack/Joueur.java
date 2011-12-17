@@ -18,7 +18,7 @@ public class Joueur {
         
     }
 
-    public Joueur(int budget, String nom) {
+    public Joueur(double budget, String nom) {
         this.main = new Main();
         this.budget = budget;
         this.nom = nom;
