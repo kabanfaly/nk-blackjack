@@ -8,20 +8,20 @@ import java.util.ArrayList;
  */
 public class Table {
 
-   private ArrayList<Joueur> joueurs;
-   private ArrayList<Carte> cartes;
-   private Joueur croupier;
-   private ArrayList<Carte> defausse; // carte de la defausse
+    private ArrayList<Joueur> joueurs;
+    private ArrayList<Carte> cartes;
+    private Joueur croupier;
+    private ArrayList<Carte> defausse; // carte de la defausse
 
     public Table(ArrayList<Joueur> joueurs) {
-        this.joueurs = joueurs;        
+        this.joueurs = joueurs;
         this.croupier = new Joueur(0, "Croupier");
         this.cartes = new ArrayList<Carte>();
         //Creation de 6 jeux de 52 cartes
-        for(int i=0; i<6; i++){
+        for (int i = 0; i < 6; i++) {
             this.cartes.addAll(Table.creer52Cartes());
         }
-        defausse=  new ArrayList<Carte>();
+        defausse = new ArrayList<Carte>();
     }
 
     /**
@@ -109,23 +109,24 @@ public class Table {
     }
 
     /**
-     * Supprime un carte du jeu de cartes
-     * @param c carte à supprimer
+     * Debarasse la table de jeu en ajoutant toutes les cartes des joueurs ainsi
+     * celles du croupier dans la defausse
      */
-    public void supprimerCarte(Carte c) {
-        if (cartes.contains(c)) {
-            cartes.remove(c);
+    public void debarasserTable() {
+        for (int i = 0; i < joueurs.size(); i++) {
+            defausse.addAll(joueurs.get(i).getMain().getCartes());
         }
+        defausse.addAll(croupier.getMain().getCartes());
     }
 
     /**
      * Melange les carte du jeu
      */
-    public void melanger() {       
+    public void melanger() {
         //nombre de cartes
-        int n = cartes.size(); 
+        int n = cartes.size();
         //effectue le melange 1000 fois
-        for(int i=0; i<1000; i++){
+        for (int i = 0; i < 1000; i++) {
             int position1 = Table.randomInt(n);
             int position2 = Table.randomInt(n);
             //echanger les positions
@@ -134,59 +135,84 @@ public class Table {
             cartes.set(position2, tmp);
         }
     }
-    public void distribuer(){
+
+    /**
+     * Effectue l'action de mise pour chaque joueur
+     */
+    public void miser() {
+        int mise = -1;
+        for (int i = 0; i < joueurs.size(); i++) {
+            while (mise == -1) { // tant que le montant saisi n'est pas valide
+                System.out.print(joueurs.get(i).getNom() + "\"Budget = "+ joueurs.get(i).getBudget()+" euro(s)\", saisissez votre mise: ");
+                mise = Blackjack.readInt();
+                if (joueurs.get(i).estBudgetSuffisant(mise)) {
+                    joueurs.get(i).miser(mise);
+                }else{
+                    mise = -1; //pour reprende la mise
+                }
+            }
+            mise = -1;
+        }
+    }
+
+    public void distribuer() {
         
     }
 
     @Override
     public String toString() {
-       String retour = "***********$$$$$$$ TABLE $$$$$$$*************\n";
-       retour += "Le sabot contient: "+ cartes.size() + " cartes\n";
-       retour += "La defausse contient: "+ defausse.size() + " cartes\n";
-       retour += croupier.toString() +"\n";
-       for(int i=0; i<joueurs.size(); i++){
-           retour += joueurs.get(i).toString() +"\n";
-       }
-       
-       return retour;
+        String retour = "***********$$$$$$$ TABLE $$$$$$$*************\n";
+        retour += "Le sabot contient: " + cartes.size() + " cartes\n";
+        retour += "La defausse contient: " + defausse.size() + " cartes\n";
+        retour += croupier.toString() + "\n";
+        double totalMises = 0;
+        for (int i = 0; i < joueurs.size(); i++) {
+            totalMises += joueurs.get(i).getMise();
+            retour += joueurs.get(i).toString() + "\n";
+        }
+        retour += "Total des mises: " + totalMises + " euro(s)\n";
+        return retour;
     }
-    
+
     /**
      * Defausse la première carte du jeu
      */
-    public void defausserUneCarte(){
-        if(cartes.size() > 0){
+    public void defausserUneCarte() {
+        if (cartes.size() > 0) {
             defausse.add(cartes.get(0)); // ajout la de premiere carte a la defausse
             cartes.remove(0); // suppression de la premiere carte des cartes du jeu
         }
     }
+
     /**
      * Donne la premiere carte du jeu a un joueur
      * @param j le joueur demandeur
      */
-    public void donnerCarte(Joueur j){
-       j.ajouterCarte(cartes.get(0));
-       cartes.remove(0);
+    public void donnerCarte(Joueur j) {
+        j.ajouterCarte(cartes.get(0));
+        cartes.remove(0);
     }
-    
+
     /**
      * Cree le sabot: Melange les cartes du jeu puis defausse les 5 premieres carte
      */
-    public void creerSabot(){
+    public void creerSabot() {
         this.melanger();
-        for(int i=0; i<5; i++){
+        for (int i = 0; i < 5; i++) {
             this.defausserUneCarte();
         }
     }
+
     /**
      * Verifie que le sabot contient moins de 52 cartes. Si oui on recupere la carte de la defausse;
      */
-    public void validerTour(){
-        if(cartes.size() < 52){
+    public void validerTour() {
+        if (cartes.size() < 52) {
             cartes.addAll(defausse); //recuperer les cartes de la defausse
             defausse.clear(); // reinitialisation de la defausse
         }
     }
+
     /**
      * Renvoie un entier aleatoirement choisi entre 0 (compris) et max (non
      * compris).
@@ -197,10 +223,11 @@ public class Table {
         java.util.Random gen = new java.util.Random();
         return gen.nextInt(max);
     }
+
     /**
      * Creer un jeu de 52 carte
      */
-    public static ArrayList<Carte> creer52Cartes(){
+    public static ArrayList<Carte> creer52Cartes() {
         ArrayList<Carte> cartes = new ArrayList<Carte>();
         //Cartes As
         Carte asTreifle = new Carte("As de treifle", 11);
@@ -212,7 +239,7 @@ public class Table {
         cartes.add(asCarreau);
         cartes.add(asCoeur);
         cartes.add(asPique);
-        
+
         //Cartes deux
         Carte deuxTreifle = new Carte("Deux de treifle", 2);
         Carte deuxCarreau = new Carte("Deux de carreau", 2);
@@ -223,7 +250,7 @@ public class Table {
         cartes.add(deuxCarreau);
         cartes.add(deuxCoeur);
         cartes.add(deuxPique);
-        
+
         //Cartes trois
         Carte troisTreifle = new Carte("Trois de treifle", 3);
         Carte troisCarreau = new Carte("Trois de carreau", 3);
@@ -234,7 +261,7 @@ public class Table {
         cartes.add(troisCarreau);
         cartes.add(troisCoeur);
         cartes.add(troisPique);
-        
+
         //Cartes quatre
         Carte quatreTreifle = new Carte("Quatre de treifle", 4);
         Carte quatreCarreau = new Carte("Quatre de carreau", 4);
@@ -245,7 +272,7 @@ public class Table {
         cartes.add(quatreCarreau);
         cartes.add(quatreCoeur);
         cartes.add(quatrePique);
-        
+
         //Cartes cinq
         Carte cinqTreifle = new Carte("Cinq de treifle", 5);
         Carte cinqCarreau = new Carte("Cinq de carreau", 5);
@@ -256,7 +283,7 @@ public class Table {
         cartes.add(cinqCarreau);
         cartes.add(cinqCoeur);
         cartes.add(cinqPique);
-        
+
         //Cartes six
         Carte sixTreifle = new Carte("Six de treifle", 6);
         Carte sixCarreau = new Carte("Six de carreau", 6);
@@ -267,7 +294,7 @@ public class Table {
         cartes.add(sixCarreau);
         cartes.add(sixCoeur);
         cartes.add(sixPique);
-        
+
         //Cartes sept
         Carte septTreifle = new Carte("Sept de treifle", 7);
         Carte septCarreau = new Carte("Sept de carreau", 7);
@@ -278,7 +305,7 @@ public class Table {
         cartes.add(septCarreau);
         cartes.add(septCoeur);
         cartes.add(septPique);
-        
+
         //Cartes huit
         Carte huitTreifle = new Carte("Huit de treifle", 8);
         Carte huitCarreau = new Carte("Huit de carreau", 8);
@@ -289,7 +316,7 @@ public class Table {
         cartes.add(huitCarreau);
         cartes.add(huitCoeur);
         cartes.add(huitPique);
-        
+
         //Cartes neuf
         Carte neufTreifle = new Carte("Neuf de treifle", 9);
         Carte neufCarreau = new Carte("Neuf de carreau", 9);
@@ -310,7 +337,7 @@ public class Table {
         cartes.add(dixCarreau);
         cartes.add(dixCoeur);
         cartes.add(dixPique);
-        
+
         //Cartes valet
         Carte valetTreifle = new Carte("Valet de treifle", 10);
         Carte valetCarreau = new Carte("Valet de carreau", 10);
@@ -326,7 +353,7 @@ public class Table {
         Carte dameCarreau = new Carte("Dame de carreau", 10);
         Carte dameCoeur = new Carte("Dame de coeur", 10);
         Carte damePique = new Carte("Dame de pique", 10);
-        
+
         //Ajout dame
         cartes.add(dameTreifle);
         cartes.add(dameCarreau);
@@ -342,8 +369,8 @@ public class Table {
         cartes.add(roiCarreau);
         cartes.add(roiCoeur);
         cartes.add(roiPique);
-        
+
         return cartes;
-        
+
     }
 }

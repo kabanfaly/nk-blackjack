@@ -15,7 +15,7 @@ public class Joueur {
         this.main = main;
         this.budget = budget;
         this.nom = nom;
-        
+
     }
 
     public Joueur(double budget, String nom) {
@@ -47,14 +47,14 @@ public class Joueur {
     public Main getMain() {
         return main;
     }
-  
+
     /**
      * Accède au nom du joueur
      * @return le budget
      */
     public String getNom() {
         return nom;
-    }    
+    }
 
     /**
      * Modifie la main du joueur
@@ -83,29 +83,35 @@ public class Joueur {
     public void setMise(double mise) {
         this.mise = mise;
     }
-    
-    
-    public void miser(){
-        if(mise <= budget){
+
+    public boolean estBudgetSuffisant(double mise) {
+        return budget >= mise;
+    }
+
+    /**
+     * Permet a un joueur de miser une somme
+     * @param mise 
+     */
+    public void miser(double mise) {
+        if (estBudgetSuffisant(mise)) {
+            this.setMise(mise);
             budget -= mise;
-            mise = 0;
-        }else{
-            System.out.println(nom + ", votre budget est insuffisant. Vous disposez de "+ budget + "euro(s).");
+        } else {
+            System.out.println(nom + ", votre budget est insuffisant. Vous disposez de " + budget + "euro(s).");
         }
     }
 
     @Override
     public String toString() {
-        String retour = "****************** "+ nom + " *****************\n";
+        String retour = "****************** " + nom + " *****************\n";
         retour += "------ Mains -------- \n";
         retour += main.toString();
         retour += "------ Mise --------\n";
         retour += mise + " euro(s)\n";
         retour += "------ Budget --------\n";
         retour += budget + " euro(s)\n";
-        retour +=  "*************************************************";
-        
+        retour += "*************************************************";
+
         return retour;
     }
-    
 }

@@ -67,8 +67,9 @@ public class Blackjack {
             nbJoueurs = Blackjack.readInt();
         }
         for (int i = 1; i <= nbJoueurs; i++) {
-           joueurs.add(new Joueur(1000, "Joueur "+i));
+            joueurs.add(new Joueur(1000, "Joueur " + i));
         }
+        System.out.println("***** Fin de la configuration ********");
         return joueurs;
     }
 
@@ -82,7 +83,16 @@ public class Blackjack {
             switch (choixMenu) {
                 case 1:
                     table = new Table(Blackjack.nouvellePartie());
+                    System.out.println("***** Début des mises ********");
+                    table.miser();      // chaque joueur mise un montant
+                    System.out.println("***** Fin des mises ********");
+                    table.melanger();   // le croupier malange les cartes
+                    table.creerSabot(); // le croupier defausse les 5 premieres cartes du jeu et le reste forme le sabot
+                    System.out.println("***** Début de la partie ********");
+                    table.distribuer();                     
                     System.out.println(table);
+                    System.out.println("***** Fin de la partie ********");
+
                     break;
                 case 2:
                     System.out.println("Merci de votre visite, au revoir !");

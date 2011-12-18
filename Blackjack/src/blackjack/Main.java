@@ -53,11 +53,19 @@ public class Main {
      * Calcule le total de points que rapporte toutes les cartes
      * @return le total des points
      */
-    public int calculerPoints(){
+    public int somme(){
         int total = 0;
         int taille = cartes.size();
+        boolean contientAs = false;
         for(int i=0; i<taille; i++){
+            //verifie l'existance d'un as afin d'avoir une valeur optimale
+            if(cartes.get(i).getType().contains("As")){
+                contientAs = true;
+            }
             total += cartes.get(i).getValeur();
+        }
+        if(contientAs && total > 21){
+            total -= 10;
         }
         return total;
     }
