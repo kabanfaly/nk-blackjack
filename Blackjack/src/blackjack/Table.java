@@ -109,14 +109,16 @@ public class Table {
     }
 
     /**
-     * Debarasse la table de jeu en ajoutant toutes les cartes des joueurs ainsi
-     * celles du croupier dans la defausse
+     * Debarasse la table de jeu en ajoutant toutes les mains des joueurs ainsi
+     * celles du croupier dans la defausse, 
      */
-    public void debarasserTable() {
+    public void debarasser() {
         for (int i = 0; i < joueurs.size(); i++) {
             defausse.addAll(joueurs.get(i).getMain().getCartes());
+            joueurs.get(i).getMain().setCartes(new ArrayList<Carte>());
         }
         defausse.addAll(croupier.getMain().getCartes());
+        croupier.getMain().setCartes(new ArrayList<Carte>());
     }
 
     /**
@@ -139,15 +141,15 @@ public class Table {
     /**
      * Effectue l'action de mise pour chaque joueur
      */
-    public void miser() {
+    public void mise() {
         int mise = -1;
         for (int i = 0; i < joueurs.size(); i++) {
             while (mise == -1) { // tant que le montant saisi n'est pas valide
-                System.out.print(joueurs.get(i).getNom() + "\"Budget = "+ joueurs.get(i).getBudget()+" euro(s)\", saisissez votre mise: ");
+                System.out.print(joueurs.get(i).getNom() + "\"Budget = " + joueurs.get(i).getBudget() + " euro(s)\", saisissez votre mise: ");
                 mise = Blackjack.readInt();
                 if (joueurs.get(i).estBudgetSuffisant(mise)) {
                     joueurs.get(i).miser(mise);
-                }else{
+                } else {
                     mise = -1; //pour reprende la mise
                 }
             }
@@ -155,8 +157,176 @@ public class Table {
         }
     }
 
+    /**
+     * Distribue deux cartes a chaque joueur et une carte au croupier
+     */
     public void distribuer() {
-        
+        int choix = 0;
+        //distribue deux cartes a chaque joueur
+        for (int i = 0; i < joueurs.size(); i++) {
+            donnerCarte(joueurs.get(i)); //
+            donnerCarte(joueurs.get(i)); //
+            System.out.println(joueurs.get(i));
+            /*  if (joueurs.get(i).getMain().estPartagePossible()) {
+            System.out.println("\n" + joueurs.get(i).getNom() + ", Souhaitez vous partager votre main? ");
+            System.out.println("1- oui");
+            System.out.println("2- non");
+            System.out.print("Votre choix: ");
+            choix = Blackjack.readInt();
+            if (choix == 1) {
+            Joueur j = joueurs.get(i); // creation d'un joueur identique au jour courant
+            String nom = j.getNom();
+            joueurs.get(i).setNom(nom + " (A)"); //modifie le nom du joueur courant
+            joueurs.get(i).getMain().getCartes().remove(j.getMain().getCartes().get(0)); //Supprime la premiere carte du joueur courant
+            joueurs.get(i).setEstPartager(true); //carte partagee
+            donnerCarte(joueurs.get(i));
+            
+            j.setNom(nom + " (B)"); // modifie le nom du nouveau joueur (deuxieme partie du joueur courant)
+            j.getMain().getCartes().remove(j.getMain().getCartes().get(1)); //Supprime la deuxième carte du 2eme joueur
+            donnerCarte(j); // donner une deuxième carte au 2eme joueur
+            j.setEstPartager(true); // carte partagee
+            ajouterJoueur(j); // ajout du 2 joueur joueur dans le jeu                      
+            }
+            }*/
+            if (joueurs.get(i).getMain().somme() < 21) {
+                System.out.println("\n" + joueurs.get(i).getNom() + ", Souhaitez vous double votre mise? ");
+                System.out.println("1- oui");
+                System.out.println("2- non");
+                System.out.print("Votre choix: ");
+                choix = Blackjack.readInt();
+                if (choix == 1) {
+                    joueurs.get(i).miser(joueurs.get(i).getMise());
+                    System.out.println("Votre mise est maintenant de " + joueurs.get(i).getMise() + " euros");
+                }
+            }
+        }
+        //distribue une carte au croupier
+        donnerCarte(croupier);
+        System.out.println(this);
+    }
+
+    public static void menuChoixHit() {
+        System.out.println("******* Choix disponibles *****");
+        System.out.println("1- Un Hit   (Tirer une carte)");
+        System.out.println("2- Rester   (Stand)");
+        System.out.print("Votre choix: ");
+    }
+
+    /**
+     * Fait un tour
+     */
+    public void faireUnTour() {
+        distribuer();
+
+        for (int i = 0; i < joueurs.size(); i++) {
+            if (croupier.getMain().getCartes().get(0).getType().contains("As")) { // si assurance possible
+                System.out.println("\n" + joueurs.get(i).getNom() + ", Voulez vous prendre une assurance ?");
+                System.out.println("1- oui");
+                System.out.println("2- non");
+                System.out.print("Votre choix: ");
+                if (Blackjack.readInt() == 1) {
+                    joueurs.get(i).setEstAssurance(true);
+                    //paye la moitie de sa mise comme assurance
+                    double miseJoueur = joueurs.get(i).getMise();
+                    joueurs.get(i).setMise(miseJoueur + miseJoueur / 2);
+                }
+            }
+            int choix = 0;
+            boolean tirer = true;
+            while (tirer && joueurs.get(i).getMain().somme() < 21) { // tant que le joueur souhaite recevoir une carte
+                System.out.println(joueurs.get(i));
+                System.out.println("\n" + joueurs.get(i).getNom() + ", a vous de jouer. Faites un choix");
+                Table.menuChoixHit();
+                choix = Blackjack.readInt();
+                if (choix == 1) {
+                    donnerCarte(joueurs.get(i));
+
+                } else {
+                    tirer = false;
+                }
+            }
+        }
+        //croupier
+        pioche16Reste17();
+    }
+
+    /**
+     * Simule le pioche a 16 et reste a 17
+     */
+    public void pioche16Reste17() {
+        while (croupier.getMain().somme() < 17) {
+            donnerCarte(croupier);
+        }
+    }
+
+    /**
+     * Calcul les gagnants et les perdants du jeu
+     */
+    public void resultat() {
+        int pointCroupier = croupier.getMain().somme();
+        ArrayList<Joueur> gagnants = new ArrayList<Joueur>();
+        ArrayList<Joueur> perdants = new ArrayList<Joueur>();
+        if (pointCroupier > 21) { // le croupier depasse 21 point alors tous les joueurs restant gagnent
+            gagnants = joueurs;
+        } else {//sinon les joueurs dont le nombre de point depasse celui du croupier perdent
+            for (int i = 0; i < joueurs.size(); i++) {
+                Joueur j = joueurs.get(i);
+                /**
+                 * on elimine les perdants et le croupier recupère les mises des perdants
+                 */
+                if (j.getMain().somme() < pointCroupier || j.getMain().somme() > 21) {
+                    perdants.add(j);
+                    double budgetCroupier = croupier.getBudget();
+                    croupier.setBudget(budgetCroupier + j.getMise());
+                    // joueurs.remove(j);
+                } else {
+                    if (j.isAssurance()) {
+                        double miseJoueur = j.getMise();
+                        double miseInitiale = (3 * miseJoueur / 2);
+                        double miseAssu = miseInitiale / 2;
+                        if (pointCroupier == 21) {
+                            joueurs.get(i).setBudget(joueurs.get(i).getBudget() + miseAssu * 2);
+
+                        } else {
+                            double budgetCroupier = croupier.getBudget();
+                            croupier.setBudget(budgetCroupier + miseAssu);
+                        }
+                    } else if (j.getMain().getCartes().size() == 2 && j.getMain().somme() == 21) { // si blackjack
+                        joueurs.get(i).setBudget(j.getBudget() + j.getMise() * 1.5 + j.getMise());
+                    } else if (j.getMain().somme() == pointCroupier) { // les joueurs ayant les memes point que le croupier recupèrent leurs mise
+                        joueurs.get(i).setBudget(j.getBudget() + j.getMise());
+                    } else { // simple gagnant
+                        joueurs.get(i).setBudget(j.getBudget() + j.getMise() * 2);
+                    }
+                                     
+                    gagnants.add(joueurs.get(i));
+                }
+                joueurs.get(i).setMise(0);
+                croupier.setMise(0);
+                
+            }
+        }
+        System.out.println(this);
+        System.out.println("**********$$$$$ RESULTAT $$$$$*********");
+        if (!gagnants.isEmpty()) {
+            System.out.println("**********---- GAGNANTS ----*********");
+            for (int i = 0; i < gagnants.size(); i++) {
+                System.out.println(gagnants.get(i));
+            }
+        } else {
+            System.out.println("**********---- LE CROUPIER GAGNE ----*********");
+            System.out.println(croupier);
+        }
+        if (!perdants.isEmpty()) {
+            System.out.println("**********---- PERDANTS ----*********");
+            for (int i = 0; i < perdants.size(); i++) {
+                System.out.println(perdants.get(i));
+            }
+        } else {
+            System.out.println("**********---- LE CROUPIER EST PERDANT ----*********");
+            System.out.println(croupier);
+
+        }
     }
 
     @Override
@@ -204,9 +374,12 @@ public class Table {
     }
 
     /**
+     * Debarasse la table 
      * Verifie que le sabot contient moins de 52 cartes. Si oui on recupere la carte de la defausse;
+     * 
      */
     public void validerTour() {
+        debarasser();
         if (cartes.size() < 52) {
             cartes.addAll(defausse); //recuperer les cartes de la defausse
             defausse.clear(); // reinitialisation de la defausse

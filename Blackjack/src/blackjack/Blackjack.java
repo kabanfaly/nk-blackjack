@@ -84,13 +84,16 @@ public class Blackjack {
                 case 1:
                     table = new Table(Blackjack.nouvellePartie());
                     System.out.println("***** Début des mises ********");
-                    table.miser();      // chaque joueur mise un montant
+                    table.mise();      // chaque joueur mise un montant
                     System.out.println("***** Fin des mises ********");
                     table.melanger();   // le croupier malange les cartes
                     table.creerSabot(); // le croupier defausse les 5 premieres cartes du jeu et le reste forme le sabot
                     System.out.println("***** Début de la partie ********");
-                    table.distribuer();                     
-                    System.out.println(table);
+                   // while (!table.estPartieFinie()) {
+                        table.faireUnTour();
+                        table.resultat();
+                        table.validerTour();                        
+                    //}
                     System.out.println("***** Fin de la partie ********");
 
                     break;

@@ -10,6 +10,8 @@ public class Joueur {
     private double budget;  // le budget du joueur
     private String nom; // le nom du joueur
     private double mise = 0; // le nom du joueur
+    private boolean estAssurance = false; // determine si le joueur a demandé une assurance
+    private boolean estPartager = false; // determine si le joueur a demandé de partager son jeu
 
     public Joueur(Main main, double budget, String nom) {
         this.main = main;
@@ -55,6 +57,13 @@ public class Joueur {
     public String getNom() {
         return nom;
     }
+    /**
+     * modifie la valeur du nom
+     * @param nom le nouveau nom
+     */
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
 
     /**
      * Modifie la main du joueur
@@ -84,6 +93,38 @@ public class Joueur {
         this.mise = mise;
     }
 
+    /**
+     * return la valeur du choix assurance
+     * @return 
+     */
+    public boolean isAssurance() {
+        return estAssurance;
+    }
+
+    /**
+     * modifie la valeur du choix assurance
+     * @param estAssurance nouvelle valeur de l'assurance
+     */
+    public void setEstAssurance(boolean estAssurance) {
+        this.estAssurance = estAssurance;
+    }
+    
+    /**
+     * return oui si le jeu a ete partage et non sinon
+     * @return 
+     */
+    public boolean isPartager() {
+        return estPartager;
+    }
+    /**
+     * modifie la valeur du choix partager
+     * @param estPartager nouvelle valeur du choix partager
+     */
+    public void setEstPartager(boolean estPartager) {
+        this.estPartager = estPartager;
+    }
+    
+
     public boolean estBudgetSuffisant(double mise) {
         return budget >= mise;
     }
@@ -105,6 +146,7 @@ public class Joueur {
     public String toString() {
         String retour = "****************** " + nom + " *****************\n";
         retour += "------ Mains -------- \n";
+        main.somme();
         retour += main.toString();
         retour += "------ Mise --------\n";
         retour += mise + " euro(s)\n";
