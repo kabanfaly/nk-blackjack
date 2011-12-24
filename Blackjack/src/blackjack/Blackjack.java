@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package blackjack;
 
 import java.util.ArrayList;
@@ -63,8 +59,12 @@ public class Blackjack {
         int nbJoueurs = 0;
         //recupération du nombre de joueurs
         while (nbJoueurs <= 0) {
-            System.out.print("Nombre de joueur(s): ");
-            nbJoueurs = Blackjack.readInt();
+            System.out.print("Nombre de joueurs: ");
+            nbJoueurs = Blackjack.readInt();            
+            if(nbJoueurs > 7){
+                nbJoueurs = 0;
+                  System.out.print("Nombre de joueurs autorisés: 7 au maximum ");
+            }
         }
         for (int i = 1; i <= nbJoueurs; i++) {
             joueurs.add(new Joueur(1000, "Joueur " + i));

@@ -112,7 +112,7 @@ public class Table {
      * Debarasse la table de jeu en ajoutant toutes les mains des joueurs ainsi
      * celles du croupier dans la defausse, 
      */
-    public void debarasser() {
+    public void debarrasser() {
         for (int i = 0; i < joueurs.size(); i++) {
             defausse.addAll(joueurs.get(i).getMain().getCartes());
             joueurs.get(i).getMain().setCartes(new ArrayList<Carte>());
@@ -278,7 +278,7 @@ public class Table {
                     perdants.add(j);
                     double budgetCroupier = croupier.getBudget();
                     croupier.setBudget(budgetCroupier + j.getMise());
-                    // joueurs.remove(j);
+                     //supprimerJoueur(j);
                 } else {
                     if (j.isAssurance()) {
                         double miseJoueur = j.getMise();
@@ -379,7 +379,7 @@ public class Table {
      * 
      */
     public void validerTour() {
-        debarasser();
+        debarrasser();
         if (cartes.size() < 52) {
             cartes.addAll(defausse); //recuperer les cartes de la defausse
             defausse.clear(); // reinitialisation de la defausse
