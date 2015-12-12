@@ -2,7 +2,7 @@ package blackjack;
 
 /**
  *
- * @author CONDE Oumar
+ * @author KABA N'faly
  */
 public class Carte {
     private String type; // le type de la carte    

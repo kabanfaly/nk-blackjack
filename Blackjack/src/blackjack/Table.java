@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author CONDE Oumar
+ * @author KABA N'faly
  */
 public class Table {
 
